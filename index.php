@@ -24,7 +24,19 @@ $players = $players -> fetchALL();
 $toptime = $linkpdo->prepare("SELECT player_name, TOTAL_WORLD_TIME FROM stats ORDER BY TOTAL_WORLD_TIME DESC LIMIT 3");
 $toptime -> execute();
 $toptime = $toptime -> fetchALL();
+
+//Podium Morts
+$topDead = $linkpdo->prepare("SELECT player_name, DEATHS FROM stats ORDER BY DEATHS DESC LIMIT 3");
+$topDead -> execute();
+$topDead = $topDead -> fetchALL();
+
+//Podium Diamants
+$topDiamant = $linkpdo->prepare("SELECT player_name, JSON_EXTRACT(mine_block, '$.DIAMOND_ORE') AS diamant FROM stats ORDER BY diamant DESC LIMIT 3");
+$topDiamant -> execute();
+$topDiamant = $topDiamant -> fetchALL();
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -126,17 +138,61 @@ $toptime = $toptime -> fetchALL();
             <div class="col">
                 <h1>Top <img src="src/img/mort.png" class="icon" alt="image d'un crane"></h1>
                 <div class="podium">
-                    <div class="left">1</div>
-                    <div class="top">2</div>
-                    <div class="right">3</div>
+                    <div class="left vstack">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDead[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDead[0]['player_name'] ?? "Personne"?></b> 
+                            <b><?=$topDead[0]['DEATHS']?>☠</b> 
+                        </div>
+                    </div>
+
+                    <div class="top">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDead[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDead[1]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDead[1]['DEATHS'] ?? 0?>☠</b> 
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDead[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDead[2]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDead[2]['DEATHS'] ?? 0?>☠</b> 
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">
                 <h1>Top <img src="src/img/diamant.png" class="icon" alt="image de diamant du jeu minecraft"></h1>
                 <div class="podium">
-                    <div class="left">1</div>
-                    <div class="top">2</div>
-                    <div class="right">3</div>
+                    <div class="left vstack">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDiamant[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDiamant[0]['player_name'] ?? "Personne"?></b> 
+                            <b><?=$topDiamant[0]['diamant']?>💎</b> 
+                        </div>
+                    </div>
+
+                    <div class="top">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDiamant[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDiamant[1]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDiamant[1]['diamant'] ?? 0?>💎</b> 
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDiamant[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDiamant[2]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDiamant[2]['diamant'] ?? 0?>💎</b> 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
