@@ -18,6 +18,12 @@ $players = $linkpdo->prepare($query);
 
 $players -> execute($params);
 $players = $players -> fetchALL();
+
+
+//Podium Temps
+$toptime = $linkpdo->prepare("SELECT player_name, TOTAL_WORLD_TIME FROM stats ORDER BY TOTAL_WORLD_TIME DESC LIMIT 3");
+$toptime -> execute();
+$toptime = $toptime -> fetchALL();
 ?>
 
 <!DOCTYPE html>
@@ -89,12 +95,49 @@ $players = $players -> fetchALL();
         <div class="row">
             <div class="col">
                 <h1>Top <img src="src/img/time.png" class="icon" alt="image d'une horloge"></h1>
+                <div class="podium">
+                    <div class="left vstack">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$toptime[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$toptime[0]['player_name'] ?? "Personne"?></b> 
+                            <b><?=TickToTimeShort($toptime[0]['TOTAL_WORLD_TIME'])?></b> 
+                        </div>
+                    </div>
+
+                    <div class="top">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$toptime[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$toptime[1]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=TickToTimeShort($toptime[1]['TOTAL_WORLD_TIME'] ?? 0)?></b> 
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$toptime[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$toptime[2]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=TickToTimeShort($toptime[2]['TOTAL_WORLD_TIME'] ?? 0)?></b> 
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col">
                 <h1>Top <img src="src/img/mort.png" class="icon" alt="image d'un crane"></h1>
+                <div class="podium">
+                    <div class="left">1</div>
+                    <div class="top">2</div>
+                    <div class="right">3</div>
+                </div>
             </div>
             <div class="col">
                 <h1>Top <img src="src/img/diamant.png" class="icon" alt="image de diamant du jeu minecraft"></h1>
+                <div class="podium">
+                    <div class="left">1</div>
+                    <div class="top">2</div>
+                    <div class="right">3</div>
+                </div>
             </div>
         </div>
     </div>
