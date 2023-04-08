@@ -31,15 +31,22 @@ $players = $players -> fetchALL();
     <title>CraftStat</title>
 </head>
 <body >
-    
-    <form action="" class="p-4 ">
-        <h1>Statistique du serveur <?=$serverName?></h1>
-        <div class="form-group hstack">
-            <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?=htmlentities($_GET['q'] ?? null) ?>">
-            <button class="btn btn-primary">Rechercher</button>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h1 class=""><?=$serverName?></h1>
+            </div>
+            <div class="col">
+                <form action="" class="p-2">
+                        <div class="form-group hstack">
+                            
+                            <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?=htmlentities($_GET['q'] ?? null) ?>">
+                            <button class="btn btn-primary mx-2">Rechercher</button>
+                        </div>
+                </form>
+            </div>
         </div>
-        
-    </form>
+    </div>
 
     <table class="table table-striped table-bordered ">
         <thead class="table-dark">
@@ -76,5 +83,20 @@ $players = $players -> fetchALL();
             </tr>
         </tbody>
     </table>
+
+    <!-- Partie podium -->
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h1>Top <img src="src/img/time.png" class="icon" alt="image d'une horloge"></h1>
+            </div>
+            <div class="col">
+                <h1>Top <img src="src/img/mort.png" class="icon" alt="image d'un crane"></h1>
+            </div>
+            <div class="col">
+                <h1>Top <img src="src/img/diamant.png" class="icon" alt="image de diamant du jeu minecraft"></h1>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
