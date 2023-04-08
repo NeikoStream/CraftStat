@@ -2,3 +2,29 @@
     width: 45px;
     height: 45px;
 }
+.podium {
+    text-align: center;
+  }
+
+.podium div {
+width:100px;
+display:inline-block;
+}
+
+.top {
+background: yellow;
+height: 125px;
+width: 100%;
+}
+
+.left {
+background: orange;
+height:150px;
+}
+
+.right {
+height:100px;
+background: rgb(255, 138, 230);
+}
+
+

@@ -6,7 +6,7 @@ $serverName = "les marmottes";
 
 //Récupérer la table stat avec toutes les infos
 
-$query = "SELECT * FROM stats";
+$query = "SELECT player_name,TOTAL_WORLD_TIME,DEATHS,JSON_EXTRACT(mine_block, '$.DIAMOND_ORE') AS diamant FROM stats";
 $params = [];
 //fonction de recherche
 if(!empty($_GET['q'])){
@@ -18,7 +18,25 @@ $players = $linkpdo->prepare($query);
 
 $players -> execute($params);
 $players = $players -> fetchALL();
+
+
+//Podium Temps
+$toptime = $linkpdo->prepare("SELECT player_name, TOTAL_WORLD_TIME FROM stats ORDER BY TOTAL_WORLD_TIME DESC LIMIT 3");
+$toptime -> execute();
+$toptime = $toptime -> fetchALL();
+
+//Podium Morts
+$topDead = $linkpdo->prepare("SELECT player_name, DEATHS FROM stats ORDER BY DEATHS DESC LIMIT 3");
+$topDead -> execute();
+$topDead = $topDead -> fetchALL();
+
+//Podium Diamants
+$topDiamant = $linkpdo->prepare("SELECT player_name, JSON_EXTRACT(mine_block, '$.DIAMOND_ORE') AS diamant FROM stats ORDER BY diamant DESC LIMIT 3");
+$topDiamant -> execute();
+$topDiamant = $topDiamant -> fetchALL();
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -66,7 +84,7 @@ $players = $players -> fetchALL();
                 <td><img src="https://minotar.net/avatar/<?=$player['player_name']?>/32.png" alt="image du joueur"> <?=$player['player_name']?></td>
                 <td><?=TickToTime($player['TOTAL_WORLD_TIME'])?></td>
                 <td><?=$player['DEATHS']?></td>
-                <td><?=$player['player_name']?></td>
+                <td><?=$player['diamant']?></td>
             </tr>
             <?php endforeach ?>
             <tr>
@@ -89,12 +107,93 @@ $players = $players -> fetchALL();
         <div class="row">
             <div class="col">
                 <h1>Top <img src="src/img/time.png" class="icon" alt="image d'une horloge"></h1>
+                <div class="podium">
+                    <div class="left vstack">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$toptime[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$toptime[0]['player_name'] ?? "Personne"?></b> 
+                            <b><?=TickToTimeShort($toptime[0]['TOTAL_WORLD_TIME'])?></b> 
+                        </div>
+                    </div>
+
+                    <div class="top">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$toptime[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$toptime[1]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=TickToTimeShort($toptime[1]['TOTAL_WORLD_TIME'] ?? 0)?></b> 
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$toptime[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$toptime[2]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=TickToTimeShort($toptime[2]['TOTAL_WORLD_TIME'] ?? 0)?></b> 
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col">
                 <h1>Top <img src="src/img/mort.png" class="icon" alt="image d'un crane"></h1>
+                <div class="podium">
+                    <div class="left vstack">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDead[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDead[0]['player_name'] ?? "Personne"?></b> 
+                            <b><?=$topDead[0]['DEATHS']?>☠</b> 
+                        </div>
+                    </div>
+
+                    <div class="top">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDead[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDead[1]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDead[1]['DEATHS'] ?? 0?>☠</b> 
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDead[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDead[2]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDead[2]['DEATHS'] ?? 0?>☠</b> 
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col">
                 <h1>Top <img src="src/img/diamant.png" class="icon" alt="image de diamant du jeu minecraft"></h1>
+                <div class="podium">
+                    <div class="left vstack">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDiamant[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDiamant[0]['player_name'] ?? "Personne"?></b> 
+                            <b><?=$topDiamant[0]['diamant']?>💎</b> 
+                        </div>
+                    </div>
+
+                    <div class="top">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDiamant[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDiamant[1]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDiamant[1]['diamant'] ?? 0?>💎</b> 
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="pt-2">
+                            <img src="https://minotar.net/avatar/<?=$topDiamant[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
+                            <b><?=$topDiamant[2]['player_name'] ?? "Personne"?></b> 
+                            <br>
+                            <b><?=$topDiamant[2]['diamant'] ?? 0?>💎</b> 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
