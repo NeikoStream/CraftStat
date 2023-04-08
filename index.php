@@ -1,9 +1,22 @@
 <?php 
 require_once('src/fonction/connexionBD.php');
 require_once('src/fonction/fonction.php');
+
+$serverName = "les marmottes";
+
 //Récupérer la table stat avec toutes les infos
-$players = $linkpdo->prepare('SELECT * FROM stats');
-$players -> execute();
+
+$query = "SELECT * FROM stats";
+$params = [];
+//fonction de recherche
+if(!empty($_GET['q'])){
+    $query .= " WHERE player_name LIKE :pseudo";
+    $params['pseudo'] = '%' . $_GET['q'] . '%';
+}
+
+$players = $linkpdo->prepare($query);
+
+$players -> execute($params);
 $players = $players -> fetchALL();
 ?>
 
@@ -17,7 +30,24 @@ $players = $players -> fetchALL();
     <link rel="stylesheet" href="src/style/style.css">
     <title>CraftStat</title>
 </head>
-<body>
+<body >
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h1 class=""><?=$serverName?></h1>
+            </div>
+            <div class="col">
+                <form action="" class="p-2">
+                        <div class="form-group hstack">
+                            
+                            <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?=htmlentities($_GET['q'] ?? null) ?>">
+                            <button class="btn btn-primary mx-2">Rechercher</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-striped table-bordered ">
         <thead class="table-dark">
             <tr>
@@ -32,7 +62,8 @@ $players = $players -> fetchALL();
             foreach($players as $player):
             ?>
             <tr>
-                <td><?=$player['player_name']?></td>
+                
+                <td><img src="https://minotar.net/avatar/<?=$player['player_name']?>/32.png" alt="image du joueur"> <?=$player['player_name']?></td>
                 <td><?=TickToTime($player['TOTAL_WORLD_TIME'])?></td>
                 <td><?=$player['DEATHS']?></td>
                 <td><?=$player['player_name']?></td>
@@ -52,5 +83,20 @@ $players = $players -> fetchALL();
             </tr>
         </tbody>
     </table>
+
+    <!-- Partie podium -->
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h1>Top <img src="src/img/time.png" class="icon" alt="image d'une horloge"></h1>
+            </div>
+            <div class="col">
+                <h1>Top <img src="src/img/mort.png" class="icon" alt="image d'un crane"></h1>
+            </div>
+            <div class="col">
+                <h1>Top <img src="src/img/diamant.png" class="icon" alt="image de diamant du jeu minecraft"></h1>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
