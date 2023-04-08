@@ -30,13 +30,15 @@ $players = $players -> fetchALL();
     <link rel="stylesheet" href="src/style/style.css">
     <title>CraftStat</title>
 </head>
-<body class="p-4">
-    <h1>Statistique du serveur <?=$serverName?></h1>
-    <form action="">
-        <div class="form-group">
+<body >
+    
+    <form action="" class="p-4 ">
+        <h1>Statistique du serveur <?=$serverName?></h1>
+        <div class="form-group hstack">
             <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?=htmlentities($_GET['q'] ?? null) ?>">
+            <button class="btn btn-primary">Rechercher</button>
         </div>
-        <button class="btn btn-primary">Rechercher</button>
+        
     </form>
 
     <table class="table table-striped table-bordered ">
@@ -53,7 +55,8 @@ $players = $players -> fetchALL();
             foreach($players as $player):
             ?>
             <tr>
-                <td><?=$player['player_name']?></td>
+                
+                <td><img src="https://minotar.net/avatar/<?=$player['player_name']?>/32.png" alt="image du joueur"> <?=$player['player_name']?></td>
                 <td><?=TickToTime($player['TOTAL_WORLD_TIME'])?></td>
                 <td><?=$player['DEATHS']?></td>
                 <td><?=$player['player_name']?></td>
