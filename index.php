@@ -1,9 +1,22 @@
 <?php 
 require_once('src/fonction/connexionBD.php');
 require_once('src/fonction/fonction.php');
+
+$serverName = "les marmottes";
+
 //Récupérer la table stat avec toutes les infos
-$players = $linkpdo->prepare('SELECT * FROM stats');
-$players -> execute();
+
+$query = "SELECT * FROM stats";
+$params = [];
+//fonction de recherche
+if(!empty($_GET['q'])){
+    $query .= " WHERE player_name LIKE :pseudo";
+    $params['pseudo'] = '%' . $_GET['q'] . '%';
+}
+
+$players = $linkpdo->prepare($query);
+
+$players -> execute($params);
 $players = $players -> fetchALL();
 ?>
 
@@ -17,7 +30,15 @@ $players = $players -> fetchALL();
     <link rel="stylesheet" href="src/style/style.css">
     <title>CraftStat</title>
 </head>
-<body>
+<body class="p-4">
+    <h1>Statistique du serveur <?=$serverName?></h1>
+    <form action="">
+        <div class="form-group">
+            <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?=htmlentities($_GET['q'] ?? null) ?>">
+        </div>
+        <button class="btn btn-primary">Rechercher</button>
+    </form>
+
     <table class="table table-striped table-bordered ">
         <thead class="table-dark">
             <tr>
