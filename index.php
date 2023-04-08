@@ -6,7 +6,7 @@ $serverName = "les marmottes";
 
 //Récupérer la table stat avec toutes les infos
 
-$query = "SELECT * FROM stats";
+$query = "SELECT player_name,TOTAL_WORLD_TIME,DEATHS,JSON_EXTRACT(mine_block, '$.DIAMOND_ORE') AS diamant FROM stats";
 $params = [];
 //fonction de recherche
 if(!empty($_GET['q'])){
@@ -66,7 +66,7 @@ $players = $players -> fetchALL();
                 <td><img src="https://minotar.net/avatar/<?=$player['player_name']?>/32.png" alt="image du joueur"> <?=$player['player_name']?></td>
                 <td><?=TickToTime($player['TOTAL_WORLD_TIME'])?></td>
                 <td><?=$player['DEATHS']?></td>
-                <td><?=$player['player_name']?></td>
+                <td><?=$player['diamant']?></td>
             </tr>
             <?php endforeach ?>
             <tr>
