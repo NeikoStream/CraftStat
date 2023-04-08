@@ -11,3 +11,6 @@ Une fois le template configuré, le ScoreBoard sera automatiquement mis à jour 
 
 ## Contribuer
 Si vous souhaitez contribuer à ce projet, vous pouvez ouvrir une pull request avec vos modifications. Veuillez vous assurer que vos modifications sont conformes aux normes de codage et de documentation de ce projet.
+
+## Exemple
+Voici un exemple qui est lié a un serveur entre amis [ICI](https://mc.neiko.fr/)
