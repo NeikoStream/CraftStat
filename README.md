@@ -1,3 +1,4 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/neikostream/craftstat/badge)](https://www.codefactor.io/repository/github/neikostream/craftstat)
 # CraftStat
 Ce projet est un template web pour le plugin [PlayerStatSync](https://www.spigotmc.org/resources/playerstatssync-1-9-x-1-19-x.86286/) qui permet aux utilisateurs de configurer et d'afficher des statistiques de serveur Minecraft dans un ScoreBoard personnalisé. Le template est facilement configurable pour répondre aux besoins de votre communauté de joueurs.
 
