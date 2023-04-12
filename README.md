@@ -20,6 +20,7 @@ Si vous souhaitez contribuer à ce projet, vous pouvez ouvrir une pull request a
 - Tableau dynamique
 - Config YML afin de ne pas avoir besoin de compétence en programmation pour l'utiliser
 - Module dynamique (choix des colonne ect...)
+- Passage sur Laravel
 
 ## Exemple
 Voici un exemple qui est lié a un serveur entre amis [ICI](https://mc.neiko.fr/)
