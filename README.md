@@ -26,7 +26,7 @@ Si vous souhaitez contribuer à ce projet, vous pouvez ouvrir une pull request a
 
 | Tache | Etat          |
 | ------- | ------------------ |
-| Liste des joueurs en ligne   | :v:  |
+| Liste des joueurs en ligne   | ✅  |
 | Tableau dynamique   | :x:  |
 | Config YML   | :x:                |
 | Module dynamique   | :x: |
