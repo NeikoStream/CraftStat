@@ -31,7 +31,7 @@ Si vous souhaitez contribuer à ce projet, vous pouvez ouvrir une pull request a
 | Config YML   | :x:                |
 | Module dynamique   | :x: |
 | Intégration de map   | :x: |
-| Passage sur Laravel   | :x:                |
+| Création d'un plugin CraftStat   | :x:                |
 
 
 
