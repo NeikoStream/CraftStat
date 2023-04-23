@@ -1,12 +1,16 @@
 <?php 
-require_once('src/fonction/connexionBD.php');
+require_once('config.php');
 require_once('src/fonction/fonction.php');
 
-$serverName = "les marmottes";
-
+//Connexion a la bd
+try {
+    $linkpdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_username, $db_password);
+} catch (Exception $e) {
+    die('Erreur : ' . $e->getMessage()); 
+}
 //Récupérer la table stat avec toutes les infos
 
-$query = "SELECT player_name,TOTAL_WORLD_TIME,DEATHS,JSON_EXTRACT(mine_block, '$.DIAMOND_ORE') AS diamant FROM stats";
+$query = "SELECT player_name, TOTAL_WORLD_TIME, DEATHS, (IFNULL(JSON_EXTRACT(mine_block, '$.DIAMOND_ORE'),0) + IFNULL(JSON_EXTRACT(mine_block, '$.DEEPSLATE_DIAMOND_ORE'),0)) as diamants FROM stats";
 $params = [];
 //fonction de recherche
 if(!empty($_GET['q'])){
@@ -14,6 +18,7 @@ if(!empty($_GET['q'])){
     $params['pseudo'] = '%' . $_GET['q'] . '%';
 }
 
+$query .= " ORDER BY TOTAL_WORLD_TIME DESC";
 $players = $linkpdo->prepare($query);
 
 $players -> execute($params);
@@ -31,7 +36,7 @@ $topDead -> execute();
 $topDead = $topDead -> fetchALL();
 
 //Podium Diamants
-$topDiamant = $linkpdo->prepare("SELECT player_name, JSON_EXTRACT(mine_block, '$.DIAMOND_ORE') AS diamant FROM stats ORDER BY diamant DESC LIMIT 3");
+$topDiamant = $linkpdo->prepare("SELECT player_name, (IFNULL(JSON_EXTRACT(mine_block, '$.DIAMOND_ORE'),0) + IFNULL(JSON_EXTRACT(mine_block, '$.DEEPSLATE_DIAMOND_ORE'),0)) as diamants FROM stats ORDER BY diamants DESC LIMIT 3");
 $topDiamant -> execute();
 $topDiamant = $topDiamant -> fetchALL();
 ?>
@@ -52,20 +57,30 @@ $topDiamant = $topDiamant -> fetchALL();
     <div class="container text-center">
         <div class="row">
             <div class="col">
+                <?php
+                    $api = json_decode(file_get_contents("https://api.mcstatus.io/v2/status/java/".$ip));
+                    $online = $api->players->online;
+                    for ($i=0; $i < $online; $i++) { 
+                        $playersOnline[$i] = $api->players->list[$i]->name_clean;
+                    }
+                ?>
+
+                    <h1><?=$online?> en ligne</h1>
+                    <h2></h2>
+            </div>
+            <div class="col">
                 <h1 class=""><?=$serverName?></h1>
             </div>
             <div class="col">
                 <form action="" class="p-2">
-                        <div class="form-group hstack">
-                            
-                            <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?=htmlentities($_GET['q'] ?? null) ?>">
-                            <button class="btn btn-primary mx-2">Rechercher</button>
+                        <div class="form-group hstack">                     
+                            <input type="text" class="form-control" name="q" placeholder="Rechercher un pseudo" value="<?php if(isset($_GET['q'])){echo htmlentities($_GET['q']);} ?>">
+                            <button class="btn btn-primary mx-2">🔎</button>
                         </div>
                 </form>
             </div>
         </div>
     </div>
-
     <table class="table table-striped table-bordered ">
         <thead class="table-dark">
             <tr>
@@ -79,26 +94,20 @@ $topDiamant = $topDiamant -> fetchALL();
             <?php
             foreach($players as $player):
             ?>
-            <tr>
-                
-                <td><img src="https://minotar.net/avatar/<?=$player['player_name']?>/32.png" alt="image du joueur"> <?=$player['player_name']?></td>
+            <tr class="<?php if (in_array($player['player_name'],$playersOnline)) {
+                echo "EnLigne";
+            }?>">
+                <td>
+                    <img src="https://minotar.net/avatar/<?=$player['player_name']?>/32.png" alt="image du joueur"> <?=$player['player_name']?> 
+                    <?php if (in_array($player['player_name'],$playersOnline)) {?>
+                        <img src="src/img/online.png" alt="enLigne" height="30px" class="ps-2">
+                    <?php } ?>
+                </td>
                 <td><?=TickToTime($player['TOTAL_WORLD_TIME'])?></td>
                 <td><?=$player['DEATHS']?></td>
-                <td><?=$player['diamant']?></td>
+                <td><?=$player['diamants']?></td>
             </tr>
             <?php endforeach ?>
-            <tr>
-                <td>Steve</td>
-                <td>999 jours</td>
-                <td>0</td>
-                <td>99999</td>
-            </tr>
-            <tr>
-                <td>Steve</td>
-                <td>999 jours</td>
-                <td>0</td>
-                <td>99999</td>
-            </tr>
         </tbody>
     </table>
 
@@ -172,7 +181,7 @@ $topDiamant = $topDiamant -> fetchALL();
                         <div class="pt-2">
                             <img src="https://minotar.net/avatar/<?=$topDiamant[0]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
                             <b><?=$topDiamant[0]['player_name'] ?? "Personne"?></b> 
-                            <b><?=$topDiamant[0]['diamant']?>💎</b> 
+                            <b><?=($topDiamant[0]['diamants'])?>💎</b> 
                         </div>
                     </div>
 
@@ -181,7 +190,7 @@ $topDiamant = $topDiamant -> fetchALL();
                             <img src="https://minotar.net/avatar/<?=$topDiamant[1]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
                             <b><?=$topDiamant[1]['player_name'] ?? "Personne"?></b> 
                             <br>
-                            <b><?=$topDiamant[1]['diamant'] ?? 0?>💎</b> 
+                            <b><?=($topDiamant[1]['diamants']) ?? 0?>💎</b> 
                         </div>
                     </div>
 
@@ -190,12 +199,18 @@ $topDiamant = $topDiamant -> fetchALL();
                             <img src="https://minotar.net/avatar/<?=$topDiamant[2]['player_name'] ?? "Notch"?>/32.png" alt="image du joueur">
                             <b><?=$topDiamant[2]['player_name'] ?? "Personne"?></b> 
                             <br>
-                            <b><?=$topDiamant[2]['diamant'] ?? 0?>💎</b> 
+                            <b><?=($topDiamant[2]['diamants']) ?? 0?>💎</b> 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="container mt-3 ">
+        <div class="row justify-content-center">
+            <a href="http://57.128.22.208:40008/"><img src="src/img/carte.png" id="carte" alt="image d'une carte"></a>
+        </div>
+    </div>
+    
 </body>
 </html>

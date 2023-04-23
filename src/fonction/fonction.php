@@ -1,9 +1,9 @@
 <?php
 
 function TickToTime($tick){
-    $tosecondes = floor($tick / 20);
-    $heures = floor($tosecondes / 3600);        
-    $minutes = floor(($tosecondes / 60) % 60);
+    $tosecondes = intval(floor($tick / 20));
+    $heures = intval(floor($tosecondes / 3600));        
+    $minutes = intval(floor($tosecondes / 60) % 60);
     $secondes= $tosecondes % 60;
     if($heures == 0 && $minutes == 0){
         return sprintf("%d secondes", $secondes);
@@ -17,9 +17,9 @@ function TickToTime($tick){
 
 
 function TickToTimeShort($tick){
-    $tosecondes = floor($tick / 20);
-    $heures = floor($tosecondes / 3600);        
-    $minutes = floor(($tosecondes / 60) % 60);
+    $tosecondes = intval(floor($tick / 20));
+    $heures = intval(floor($tosecondes / 3600));        
+    $minutes = intval(floor($tosecondes / 60) % 60);
     $secondes= $tosecondes % 60;
     if($heures == 0 && $minutes == 0){
         return sprintf("%ds", $secondes);

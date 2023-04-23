@@ -14,7 +14,6 @@ display:inline-block;
 .top {
 background: yellow;
 height: 125px;
-width: 100%;
 }
 
 .left {
@@ -27,4 +26,10 @@ height:100px;
 background: rgb(255, 138, 230);
 }
 
+.EnLigne td{
+  background-color: rgba(153, 209, 70, 0.445);
+}
 
+#carte{
+  width: 100%;
+}
