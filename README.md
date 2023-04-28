@@ -30,7 +30,7 @@ Si vous souhaitez contribuer à ce projet, vous pouvez ouvrir une pull request a
 | ------- | ------------------ |
 | Liste des joueurs en ligne   | ✅  |
 | Tableau dynamique   | :x:  |
-| Config YML   | :x:                |
+| Transformation en CMS   | :x:                |
 | Module dynamique   | :x: |
 | Intégration de map   | :x: |
 | Création d'un plugin CraftStat   | :x:                |
